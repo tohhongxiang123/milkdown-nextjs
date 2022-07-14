@@ -4,8 +4,7 @@ const RichMarkdownEditor = dynamic(() => import("../components/RichMarkdownEdito
 
 const Home = () => {
 	return (
-		<div>
-			<h1>Rich markdown nonsense</h1>
+		<div className="flex flex-col justify-center items-center">
 			<RichMarkdownEditor />
 		</div>
 	)
