@@ -1,8 +1,8 @@
 import React from 'react';
-import { Editor, rootCtx, themeFactory } from '@milkdown/core';
-import { nord, nordLight } from '@milkdown/theme-nord';
+import { Editor, rootCtx } from '@milkdown/core';
+import { nordLight } from '@milkdown/theme-nord';
 import { ReactEditor, useEditor, useNodeCtx } from '@milkdown/react';
-import { gfm, codeFence, listItem, SupportedKeys, codeInline } from '@milkdown/preset-gfm';
+import { gfm, codeFence, listItem, SupportedKeys } from '@milkdown/preset-gfm';
 import { prism } from '@milkdown/plugin-prism';
 import { math } from '@milkdown/plugin-math';
 import { indent, indentPlugin } from '@milkdown/plugin-indent';
@@ -12,26 +12,9 @@ import { history } from '@milkdown/plugin-history';
 import { diagram } from '@milkdown/plugin-diagram';
 import Head from 'next/head';
 
-const CustomCodeFence = ({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
-    const { node } = useNodeCtx()
-    return (
-        <pre className={`language-${node.attrs.language}`}>
-            <code>
-                {children}
-            </code>
-        </pre>
-    )
-}
-
 const RichMarkdownEditor = () => {
     const { editor } = useEditor((root, renderReact) => {
         const nodes = gfm
-            .configure(codeFence, { 
-                className: (attrs) => {
-                    console.log(attrs)
-                    return "language-typescript"
-                }
-             })
             .configure(listItem, {
                 keymap: {
                     [SupportedKeys.SinkListItem]: 'Tab',
