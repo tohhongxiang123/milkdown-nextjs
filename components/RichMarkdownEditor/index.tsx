@@ -72,7 +72,7 @@ const RichMarkdownEditor = () => {
 
     return (
         <>
-            <div ref={ref} className="flex flex-col justify-items-center w-full">
+            <div ref={ref} className="prose flex flex-col justify-items-center w-full max-w-full">
                 <ReactEditor editor={editor} />
             </div>
         </>
