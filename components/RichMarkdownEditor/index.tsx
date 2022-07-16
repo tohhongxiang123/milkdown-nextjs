@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Editor, rootCtx } from '@milkdown/core';
 import { nordLight } from '@milkdown/theme-nord';
 import { ReactEditor, useEditor } from '@milkdown/react';
@@ -14,10 +14,11 @@ import { slash } from '@milkdown/plugin-slash';
 import { tooltip } from '@milkdown/plugin-tooltip';
 import { menu } from '@milkdown/plugin-menu';
 import { cursor } from '@milkdown/plugin-cursor';
-import Head from 'next/head';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
 
 const RichMarkdownEditor = () => {
-    const { editor, getDom } = useEditor((root, renderReact) => {
+    const [output, setOutput] = useState('')
+    const { editor } = useEditor((root, renderReact) => {
         const nodes = gfm
             .configure(listItem, {
                 keymap: {
@@ -30,6 +31,12 @@ const RichMarkdownEditor = () => {
             .config((ctx) => {
                 ctx.set(rootCtx, root);
             })
+            .config((ctx) => {
+                ctx.get(listenerCtx).markdownUpdated((ctx, markdown, previousMarkdown) => {
+                    setOutput(markdown)
+                })
+            })
+            .use(listener)
             .use(nodes)
             .use(nordLight)
             .use(clipboard)
@@ -50,11 +57,25 @@ const RichMarkdownEditor = () => {
             )
     });
 
+    const ref = useRef<HTMLDivElement | null>(null)
+    useEffect(() => {
+        setTimeout(() => {
+            if (ref.current) {
+                const editor = ref.current.querySelector(".editor") as HTMLElement | null
+
+                if (editor) {
+                    editor.focus()
+                }
+            }
+        }, 0) // wait for editor to mount before focusing
+    }, [])
+
     return (
-        <div className="prose flex flex-col justify-items-center w-full">
-            <ReactEditor editor={editor} />
-            <button onClick={() => console.log(editor.dom)}>Get DOM</button>
-        </div>
+        <>
+            <div ref={ref} className="flex flex-col justify-items-center w-full">
+                <ReactEditor editor={editor} />
+            </div>
+        </>
     )
 };
 
