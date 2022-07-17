@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { defaultValueCtx, Editor, rootCtx } from '@milkdown/core';
-import { nordLight } from '@milkdown/theme-nord';
-import { ReactEditor, useEditor, useNodeCtx } from '@milkdown/react';
-import { codeFence, gfm, listItem, SupportedKeys, TurnIntoHeading, TurnIntoText } from '@milkdown/preset-gfm';
+import { defaultValueCtx, Editor, rootCtx, schemaCtx } from '@milkdown/core';
+import { ReactEditor, useEditor } from '@milkdown/react';
+import { gfm, listItem, SupportedKeys } from '@milkdown/preset-gfm';
 import { prism } from '@milkdown/plugin-prism';
 import { math } from '@milkdown/plugin-math';
 import { indent, indentPlugin } from '@milkdown/plugin-indent';
@@ -11,12 +10,15 @@ import { trailing } from '@milkdown/plugin-trailing';
 import { history } from '@milkdown/plugin-history';
 import { diagram } from '@milkdown/plugin-diagram';
 import { slash } from '@milkdown/plugin-slash';
-import { tooltip } from '@milkdown/plugin-tooltip';
+import { createToggleIcon, defaultButtons, tooltip, tooltipPlugin } from '@milkdown/plugin-tooltip';
 import { menu, menuPlugin } from '@milkdown/plugin-menu';
 import { cursor } from '@milkdown/plugin-cursor';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { data as defaultJsonContent } from './defaultJsonContent'
 import { placeCaretAtEnd } from './placeCaretAtEnd';
+import highlightPlugin, { ToggleHighlightedText } from './highlightPlugin';
+import { defaultConfig } from '@milkdown/plugin-menu'
+import customTheme from './customTheme';
 
 const RichMarkdownEditor = () => {
     const [markdownOutput, setMarkdownOutput] = useState('')
@@ -38,27 +40,47 @@ const RichMarkdownEditor = () => {
             })
             .config((ctx) => {
                 ctx.get(listenerCtx)
-                .markdownUpdated((ctx, markdown, previousMarkdown) => {
-                    setMarkdownOutput(markdown)
-                })
-                .updated((ctx, doc, prevDoc) => {
-                    const jsonContent = doc.toJSON()
-                    setJsonOutput(jsonContent)
-                })
+                    .markdownUpdated((ctx, markdown, previousMarkdown) => {
+                        setMarkdownOutput(markdown)
+                    })
+                    .updated((ctx, doc, prevDoc) => {
+                        const jsonContent = doc.toJSON()
+                        setJsonOutput(jsonContent)
+                    })
             })
             .use(listener)
             .use(nodes)
+            .use(customTheme)
+            .use(highlightPlugin)
             .use(math)
-            .use(nordLight)
             .use(clipboard)
             .use(cursor)
-            .use(menu)
+            .use(menu.configure(menuPlugin, {
+                config: [
+                    ...defaultConfig,
+                    [
+                        {
+                            type: 'button',
+                            icon: 'highlight' as any,
+                            key: ToggleHighlightedText,
+                        }
+                    ]
+                ]
+            }))
             .use(prism)
             .use(slash)
             .use(diagram)
             .use(history)
             .use(trailing)
-            .use(tooltip)
+            .use(tooltip.configure(tooltipPlugin, {
+                items: (ctx) => {
+                    const marks = ctx.get(schemaCtx).marks;
+                    return [
+                        ...defaultButtons(ctx),
+                        createToggleIcon('highlight' as any, ToggleHighlightedText, marks['highlighted-text'], marks['code_inline']),
+                    ]
+                }
+            }))
             .use(
                 indent.configure(indentPlugin, {
                     type: 'space',
