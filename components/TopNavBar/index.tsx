@@ -32,7 +32,7 @@ export default function TopNavBar({ links = [] }: NavbarProps) {
                     <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                         {links.map(link => (
                             <li key={link.path}>
-                                <Link href={link.path}><a className={`block py-2 pr-4 pl-3 ${isActive(link.path) ? 'text-blue-700' : 'text-gray-400 hover:text-white'}`}>{link.name}</a></Link>
+                                <Link href={link.path}><a className={`block py-2 pr-4 pl-3 ${isActive(link.path) ? 'text-white' : 'text-gray-400 hover:text-white'}`}>{link.name}</a></Link>
                             </li>
                         ))}
                     </ul>
@@ -42,7 +42,7 @@ export default function TopNavBar({ links = [] }: NavbarProps) {
                 <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium divide-y divide-slate-700 border-gray-300">
                     {links.map(link => (
                         <li key={link.path}>
-                            <Link href={link.path}><a className={`block py-2 pr-4 pl-3 ${isActive(link.path) ? 'text-blue-700' : 'text-gray-400 hover:text-white'}`}>{link.name}</a></Link>
+                            <Link href={link.path}><a className={`block py-2 pr-4 pl-3 ${isActive(link.path) ? 'text-white' : 'text-gray-400 hover:text-white'}`}>{link.name}</a></Link>
                         </li>
                     ))}
                 </ul>

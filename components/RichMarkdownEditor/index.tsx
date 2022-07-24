@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { defaultValueCtx, Editor, rootCtx, schemaCtx } from '@milkdown/core';
+import { defaultValueCtx, Editor, editorCtx, rootCtx, schemaCtx } from '@milkdown/core';
 import { ReactEditor, useEditor } from '@milkdown/react';
 import { gfm, listItem, SupportedKeys } from '@milkdown/preset-gfm';
 import { prism } from '@milkdown/plugin-prism';
@@ -63,6 +63,24 @@ const RichMarkdownEditor = () => {
                             type: 'button',
                             icon: 'highlight' as any,
                             key: ToggleHighlightedText,
+                        },
+                        {
+                            type: 'select',
+                            text: 'Color',
+                            options: [
+                                { id: 'green', text: 'Green' },
+                                { id: 'red', text: 'Red' },
+                                { id: 'blue', text: 'Blue' },
+                                { id: 'yellow', text: 'Yellow' },
+                                { id: 'remove-color', text: 'Remove Highlight' }
+                            ],
+                            onSelect: color => {
+                                if (color === 'remove-color') {
+                                    return [ToggleHighlightedText, null]
+                                }
+
+                                return color ? [ToggleHighlightedText, color] : [ToggleHighlightedText, null]
+                            }
                         }
                     ]
                 ]
@@ -74,7 +92,8 @@ const RichMarkdownEditor = () => {
             .use(trailing)
             .use(tooltip.configure(tooltipPlugin, {
                 items: (ctx) => {
-                    const marks = ctx.get(schemaCtx).marks;
+                    const marks = ctx.get(schemaCtx).marks
+
                     return [
                         ...defaultButtons(ctx),
                         createToggleIcon('highlight' as any, ToggleHighlightedText, marks['highlighted-text'], marks['code_inline']),
