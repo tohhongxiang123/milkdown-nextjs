@@ -27,6 +27,7 @@
     "@milkdown/prose": "^6.2.0",
     "@milkdown/react": "^6.2.0",
     "@milkdown/theme-nord": "^6.2.0",
+    "@tailwindcss/line-clamp": "^0.4.0",
     "katex": "^0.16.0",
     "next": "12.2.2",
     "prismjs": "^1.28.0",

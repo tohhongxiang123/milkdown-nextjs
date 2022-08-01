@@ -15,11 +15,10 @@ import { gfm, SupportedKeys } from "@milkdown/preset-gfm";
 import { useEditor } from "@milkdown/react";
 import { useState } from "react";
 import customTheme from "./customTheme";
-import { data as defaultJsonContent } from './defaultJsonContent'
 import highlightPlugin, { ToggleHighlightedText } from "./highlightPlugin";
 import { history } from '@milkdown/plugin-history';
 
-export default function useRichMarkdownEditor() {
+export default function useRichMarkdownEditor({ initialContentJSON = null } = {}) {
     const [markdownOutput, setMarkdownOutput] = useState('')
     const [jsonOutput, setJsonOutput] = useState<JSONRecord>({})
 
@@ -35,7 +34,10 @@ export default function useRichMarkdownEditor() {
         return Editor.make()
             .config((ctx) => {
                 ctx.set(rootCtx, root)
-                ctx.set(defaultValueCtx, { type: "json", value: defaultJsonContent as any }) // make sure editor mounted before setting content
+
+                if (initialContentJSON) {
+                    ctx.set(defaultValueCtx, { type: "json", value: initialContentJSON }) 
+                }
             })
             .config((ctx) => {
                 ctx.get(listenerCtx)
@@ -55,6 +57,7 @@ export default function useRichMarkdownEditor() {
             .use(clipboard)
             .use(cursor)
             .use(menu.configure(menuPlugin, {
+                className: () => 'fixed top-0',
                 config: [
                     ...defaultConfig,
                     [

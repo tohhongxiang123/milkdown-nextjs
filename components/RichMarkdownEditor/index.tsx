@@ -2,11 +2,10 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { ReactEditor } from '@milkdown/react';
 import { placeCaretAtEnd } from './placeCaretAtEnd';
 import useRichMarkdownEditor from './useRichMarkdownEditor';
+import { data as defaultJsonContent } from './defaultJsonContent'
 
 const RichMarkdownEditor = () => {
-    const { editor, jsonOutput } = useRichMarkdownEditor()
-
-    console.log(JSON.stringify(jsonOutput))
+    const { editor } = useRichMarkdownEditor()
 
     const ref = useRef<HTMLDivElement | null>(null)
     useEffect(() => {
@@ -23,7 +22,7 @@ const RichMarkdownEditor = () => {
 
     return (
         <>
-            <div ref={ref} className="prose flex flex-col justify-items-center w-full max-w-full">
+            <div ref={ref} className="prose flex flex-col justify-items-center w-full max-w-full max-h-72">
                 <ReactEditor editor={editor} />
             </div>
         </>
