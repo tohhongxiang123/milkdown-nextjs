@@ -21,12 +21,12 @@ const links = [
 
 export default function Layout({ children, title = '' } : LayoutProps) {
     return (
-        <div>
+        <div className={"h-screen flex flex-col overflow-y-hidden"}>
             <Head>
                 <title>{title.length > 0 ? title : 'Home'}</title>
             </Head>
             <TopNavBar links={links} />
-            <main>
+            <main className={"flex-grow h-full overflow-y-auto"}>
                 {children}
             </main>
         </div>

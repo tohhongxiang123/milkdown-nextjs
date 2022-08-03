@@ -18,7 +18,7 @@ import customTheme from "./customTheme";
 import highlightPlugin, { ToggleHighlightedText } from "./highlightPlugin";
 import { history } from '@milkdown/plugin-history';
 
-export default function useRichMarkdownEditor({ initialContentJSON = null } = {}) {
+export default function useRichMarkdownEditor({ initialContentJSON = null, enableMenu = true } = {}) {
     const [markdownOutput, setMarkdownOutput] = useState('')
     const [jsonOutput, setJsonOutput] = useState<JSONRecord>({})
 
@@ -31,33 +31,56 @@ export default function useRichMarkdownEditor({ initialContentJSON = null } = {}
                 }
             })
 
-        return Editor.make()
-            .config((ctx) => {
-                ctx.set(rootCtx, root)
+        let editor = Editor.make()
+        .config((ctx) => {
+            ctx.set(rootCtx, root)
 
-                if (initialContentJSON) {
-                    ctx.set(defaultValueCtx, { type: "json", value: initialContentJSON }) 
-                }
-            })
-            .config((ctx) => {
-                ctx.get(listenerCtx)
-                    .markdownUpdated((ctx, markdown, previousMarkdown) => {
-                        setMarkdownOutput(markdown)
-                    })
-                    .updated((ctx, doc, prevDoc) => {
-                        const jsonContent = doc.toJSON()
-                        setJsonOutput(jsonContent)
-                    })
-            })
-            .use(listener)
-            .use(nodes)
-            .use(customTheme)
-            .use(highlightPlugin)
-            .use(math)
-            .use(clipboard)
-            .use(cursor)
+            if (initialContentJSON) {
+                ctx.set(defaultValueCtx, { type: "json", value: initialContentJSON }) 
+            }
+        })
+        .config((ctx) => {
+            ctx.get(listenerCtx)
+                .markdownUpdated((ctx, markdown, previousMarkdown) => {
+                    setMarkdownOutput(markdown)
+                })
+                .updated((ctx, doc, prevDoc) => {
+                    const jsonContent = doc.toJSON()
+                    setJsonOutput(jsonContent)
+                })
+        })
+        .use(listener)
+        .use(nodes)
+        .use(customTheme)
+        .use(highlightPlugin)
+        .use(math)
+        .use(clipboard)
+        .use(cursor)
+        .use(prism)
+        .use(slash)
+        .use(diagram)
+        .use(history)
+        .use(trailing)
+        .use(tooltip.configure(tooltipPlugin, {
+            items: (ctx) => {
+                const marks = ctx.get(schemaCtx).marks
+
+                return [
+                    ...defaultButtons(ctx),
+                    createToggleIcon('highlight' as any, ToggleHighlightedText, marks['highlighted-text'], marks['code_inline']),
+                ]
+            }
+        }))
+        .use(
+            indent.configure(indentPlugin, {
+                type: 'space',
+                size: 4,
+            }),
+        )
+
+        if (enableMenu) {
+            editor = editor
             .use(menu.configure(menuPlugin, {
-                className: () => 'fixed top-0',
                 config: [
                     ...defaultConfig,
                     [
@@ -80,34 +103,16 @@ export default function useRichMarkdownEditor({ initialContentJSON = null } = {}
                                 if (color === 'remove-color') {
                                     return [ToggleHighlightedText, null]
                                 }
-
+    
                                 return color ? [ToggleHighlightedText, color] : [ToggleHighlightedText, null]
                             }
                         }
                     ]
                 ]
             }))
-            .use(prism)
-            .use(slash)
-            .use(diagram)
-            .use(history)
-            .use(trailing)
-            .use(tooltip.configure(tooltipPlugin, {
-                items: (ctx) => {
-                    const marks = ctx.get(schemaCtx).marks
+        }
 
-                    return [
-                        ...defaultButtons(ctx),
-                        createToggleIcon('highlight' as any, ToggleHighlightedText, marks['highlighted-text'], marks['code_inline']),
-                    ]
-                }
-            }))
-            .use(
-                indent.configure(indentPlugin, {
-                    type: 'space',
-                    size: 4,
-                }),
-            )
+        return editor
     });
 
     return { jsonOutput, markdownOutput, editor }

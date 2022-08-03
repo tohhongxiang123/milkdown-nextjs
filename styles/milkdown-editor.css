@@ -1,7 +1,19 @@
 .milkdown {
     box-shadow: none !important;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.milkdown-menu-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .milkdown .editor {
     width: 100%;
+    height: 100%;
+    padding-bottom: 40px;
 }
