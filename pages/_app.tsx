@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import 'katex/dist/katex.min.css'
 import '../styles/prism-styles.css'
 import '../styles/milkdown-editor.css'
+import '../styles/fonts.css'
 import type { AppProps } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {

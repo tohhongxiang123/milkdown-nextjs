@@ -18,7 +18,7 @@ import customTheme from "./customTheme";
 import highlightPlugin, { ToggleHighlightedText } from "./highlightPlugin";
 import { history } from '@milkdown/plugin-history';
 
-export default function useRichMarkdownEditor({ initialContentJSON = null, enableMenu = true } = {}) {
+export default function useRichMarkdownEditor({ initialContentJSON = null as any, enableMenu = true } = {}) {
     const [markdownOutput, setMarkdownOutput] = useState('')
     const [jsonOutput, setJsonOutput] = useState<JSONRecord>({})
 

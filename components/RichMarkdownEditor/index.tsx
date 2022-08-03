@@ -2,9 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { ReactEditor } from '@milkdown/react';
 import { placeCaretAtEnd } from './placeCaretAtEnd';
 import useRichMarkdownEditor from './useRichMarkdownEditor';
+import { data } from './defaultJsonContent';
 
 const RichMarkdownEditor = () => {
-    const { editor } = useRichMarkdownEditor()
+    const { editor } = useRichMarkdownEditor({ initialContentJSON: data })
 
     const ref = useRef<HTMLDivElement | null>(null)
     useEffect(() => {

@@ -1,8 +1,13 @@
-import { ThemeIcon } from '@milkdown/core';
+import { themeFactory, ThemeFont, ThemeIcon } from '@milkdown/core';
 import { nordLight } from '@milkdown/theme-nord';
 import { iconMapping } from './icons'
 
 const customTheme = nordLight.override((emotion, manager) => {
+    manager.set(ThemeFont, (key) => {
+        if (key === "typography") return '"Lato", "Helvetica Neue", Helvetica, sans-serif'
+
+        return '"Roboto Mono" monospace'
+    })
     manager.set(ThemeIcon, (key) => {
         const target = iconMapping[key];
         if (!target) {
