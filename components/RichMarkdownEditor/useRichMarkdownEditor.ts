@@ -1,4 +1,4 @@
-import { Editor, rootCtx, defaultValueCtx, schemaCtx, JSONRecord } from "@milkdown/core";
+import { Editor, rootCtx, defaultValueCtx, schemaCtx, JSONRecord, editorViewOptionsCtx } from "@milkdown/core";
 import { clipboard } from "@milkdown/plugin-clipboard";
 import { cursor } from "@milkdown/plugin-cursor";
 import { diagram } from "@milkdown/plugin-diagram";
@@ -18,7 +18,7 @@ import customTheme from "./customTheme";
 import highlightPlugin, { ToggleHighlightedText } from "./highlightPlugin";
 import { history } from '@milkdown/plugin-history';
 
-export default function useRichMarkdownEditor({ initialContentJSON = null as any, enableMenu = true } = {}) {
+export default function useRichMarkdownEditor({ initialContentJSON = null as any, enableMenu = true, editable = true } = {}) {
     const [markdownOutput, setMarkdownOutput] = useState('')
     const [jsonOutput, setJsonOutput] = useState<JSONRecord>({})
 
@@ -38,6 +38,8 @@ export default function useRichMarkdownEditor({ initialContentJSON = null as any
             if (initialContentJSON) {
                 ctx.set(defaultValueCtx, { type: "json", value: initialContentJSON }) 
             }
+
+            ctx.set(editorViewOptionsCtx, { editable: () => editable })
         })
         .config((ctx) => {
             ctx.get(listenerCtx)

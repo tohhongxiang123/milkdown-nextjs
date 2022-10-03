@@ -4,7 +4,7 @@ import { iconMapping } from './icons'
 
 const customTheme = nordLight.override((emotion, manager) => {
     manager.set(ThemeFont, (key) => {
-        if (key === "typography") return '"Lato", "Helvetica Neue", Helvetica, sans-serif'
+        if (key === "typography") return '"Roboto", "Lato", "Helvetica Neue", Helvetica, sans-serif'
 
         return '"Roboto Mono" monospace'
     })

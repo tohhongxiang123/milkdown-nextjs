@@ -8,6 +8,7 @@ export default function FlashCard({ title, content } : FlashCardProps) {
         <div className="px-4 py-8 rounded shadow-sm hover:shadow-md h-full">
             <p className="text-xl mb-4"><strong>{title}</strong></p>
             <p className="opacity-70 line-clamp-4">{content}</p>
+            <button>Edit</button>
         </div>
     )
 }
