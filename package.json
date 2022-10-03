@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@mantine/core": "^5.5.0",
+    "@mantine/hooks": "^5.5.0",
     "@milkdown/core": "^6.2.0",
     "@milkdown/plugin-clipboard": "^6.2.0",
     "@milkdown/plugin-cursor": "^6.3.0",
